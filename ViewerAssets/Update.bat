@@ -1,0 +1,1 @@
+PackageTool.exe RawAssets ViewerAssets.pak -q
