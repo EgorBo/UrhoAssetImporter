@@ -3,7 +3,8 @@
 		xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
 		xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
 		xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-		xmlns:wpf="clr-namespace:UrhoSharp.Viewer.Wpf"
+		xmlns:wpf="clr-namespace:UrhoSharp.Viewer.Wpf" 
+		xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
 		mc:Ignorable="d"
 		Title="UrhoSharp viewer" Height="800" Width="1300">
 	<Window.Resources>
@@ -26,7 +27,7 @@
 				<ColumnDefinition Width="5" />
 				<ColumnDefinition Width="5*" MinWidth="100"/>
 				<ColumnDefinition Width="5" />
-				<ColumnDefinition Width="2*" MinWidth="100"/>
+				<ColumnDefinition Width="4*" MinWidth="100"/>
 			</Grid.ColumnDefinitions>
 			<GridSplitter Grid.Column="1" Width="5" HorizontalAlignment="Stretch" />
 			<GridSplitter Grid.Column="3" Width="5" HorizontalAlignment="Stretch" />
@@ -37,7 +38,7 @@
 					<TextBlock Text="{Binding WorkingDirectory}"/>
 				</Hyperlink>
 			</TextBlock>
-			<TextBox Grid.Column="4" Text="{Binding Raw, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+			<avalonedit:TextEditor x:Name="RawEditor" Grid.Column="4" FontFamily="Consolas" SyntaxHighlighting="Xml" TextChanged="RawEditor_TextChanged" />
 
 			<Grid x:Name="LoadingPanel" Grid.Column="2" Margin="3">
 				<TextBlock x:Name="LoadingStatus" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text=""/>

@@ -9,6 +9,7 @@ using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
+using ICSharpCode.AvalonEdit.Highlighting;
 using UrhoSharp.Viewer.Core;
 using UrhoSharp.Viewer.Wpf.Properties;
 using Panel = System.Windows.Forms.Panel;
@@ -23,7 +24,6 @@ namespace UrhoSharp.Viewer.Wpf
 		PreviewerApplication previewer;
 		Panel urhoSurface;
 		string workingDirectory;
-		string raw;
 		Asset currentAsset;
 		List<SolutionItem> solutionItems;
 
@@ -37,16 +37,6 @@ namespace UrhoSharp.Viewer.Wpf
 		{
 			get { return workingDirectory; }
 			set { SetField(ref workingDirectory, value); }
-		}
-
-		public string Raw
-		{
-			get { return raw; }
-			set
-			{
-				SetField(ref raw, value);
-				File.WriteAllText(currentAsset.FullPathToAsset, value);
-			}
 		}
 
 		public MainWindow()
@@ -91,9 +81,15 @@ namespace UrhoSharp.Viewer.Wpf
 							AssetsType.AnimationSet2D, AssetsType.Material,
 							AssetsType.Particle2D, AssetsType.Particle3D,
 							AssetsType.RenderPath, AssetsType.Scene, AssetsType.UI };
+
 						if (xmlBasedAssets.Contains(currentAsset.Type))
-							raw = File.ReadAllText(currentAsset.FullPathToAsset);
-						NotifyPropertyChanged(nameof(Raw));
+						{
+							var raw = File.ReadAllText(currentAsset.FullPathToAsset);
+							RawEditor.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
+							RawEditor.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+							RawEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
+							RawEditor.Text = raw;
+						}
 						WorkingDirectory = currentAsset.RootDirectory;
 					}
 					LoadingPanel.Visibility = Visibility.Collapsed;
@@ -160,6 +156,11 @@ namespace UrhoSharp.Viewer.Wpf
 			{
 				Process.Start(WorkingDirectory);
 			}
+		}
+
+		private void RawEditor_TextChanged(object sender, EventArgs e)
+		{
+			File.WriteAllText(currentAsset.FullPathToAsset, RawEditor.Text);
 		}
 	}
 }
