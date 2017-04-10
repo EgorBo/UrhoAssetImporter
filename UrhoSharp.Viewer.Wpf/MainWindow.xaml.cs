@@ -3,15 +3,17 @@ using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Drawing;
 using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Forms;
 using ICSharpCode.AvalonEdit.Highlighting;
+using Urho;
 using UrhoSharp.Viewer.Core;
+using UrhoSharp.Viewer.Core.Previewers;
 using UrhoSharp.Viewer.Wpf.Properties;
+using Color = System.Drawing.Color;
 using Panel = System.Windows.Forms.Panel;
 
 namespace UrhoSharp.Viewer.Wpf
@@ -19,13 +21,14 @@ namespace UrhoSharp.Viewer.Wpf
 	/// <summary>
 	/// Interaction logic for MainWindow.xaml
 	/// </summary>
-	public partial class MainWindow : Window, INotifyPropertyChanged
+	public partial class MainWindow : Window, INotifyPropertyChanged, IEditor
 	{
 		PreviewerApplication previewer;
 		Panel urhoSurface;
 		string workingDirectory;
 		Asset currentAsset;
 		List<SolutionItem> solutionItems;
+		UrhoScene scene;
 
 		public List<SolutionItem> SolutionItems
 		{
@@ -73,13 +76,13 @@ namespace UrhoSharp.Viewer.Wpf
 					WorkingDirectory = string.Empty;
 					LoadingStatus.Text = "Loading...";
 					LoadingPanel.Visibility = Visibility.Visible;
-					var scene = await previewer.Show(item.Path, (int)WindowsFormsHost.Width, (int)WindowsFormsHost.Height);
+					scene = await previewer.Show(item.Path, this, (int)WindowsFormsHost.Width, (int)WindowsFormsHost.Height);
 					currentAsset = scene?.CurrentAsset;
 					if (currentAsset != null)
 					{
 						var xmlBasedAssets = new [] {
 							AssetsType.AnimationSet2D, AssetsType.Material,
-							AssetsType.Particle2D, AssetsType.Particle3D,
+							AssetsType.Particle2D, AssetsType.Particle3D, AssetsType.Prefab,
 							AssetsType.RenderPath, AssetsType.Scene, AssetsType.UI };
 
 						if (xmlBasedAssets.Contains(currentAsset.Type))
@@ -161,6 +164,29 @@ namespace UrhoSharp.Viewer.Wpf
 		private void RawEditor_TextChanged(object sender, EventArgs e)
 		{
 			File.WriteAllText(currentAsset.FullPathToAsset, RawEditor.Text);
+			var previewer = scene?.CurrentPreviewer as PrefabPreviewer;
+			previewer?.Refresh();
+		}
+
+		public void HighlightXmlForNode(Node node)
+		{
+			try
+			{
+				var text = $"name=\"Name\" value=\"{node.Name}\"";
+				var index = RawEditor.Text.IndexOf(text);
+				RawEditor.Select(index - 11, text.Length + 14);
+
+				var lines = RawEditor.Text.Split(new[] { "\n" }, StringSplitOptions.RemoveEmptyEntries);
+				for (int i = 0; i < lines.Length; i++)
+				{
+					if (lines[i].Contains(text))
+					{
+						RawEditor.ScrollToLine(i);
+						break;
+					}
+				}
+			}
+			catch { }
 		}
 	}
 }

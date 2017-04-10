@@ -55,11 +55,11 @@
     <Compile Include="Asset.cs" />
     <Compile Include="AssimpTool.cs" />
     <Compile Include="AssetsResolver.cs" />
+    <Compile Include="IEditor.cs" />
     <Compile Include="Previewers\PrefabPreviewer.cs" />
     <Compile Include="Previewers\SdfFontsPreviewer.cs" />
     <Compile Include="Utils\FsUtils.cs" />
     <Compile Include="Components\Gizmo.cs" />
-    <Compile Include="IRootAssetsDialog.cs" />
     <Compile Include="Previewers\AnimatedModelPreviewer.cs" />
     <Compile Include="PreviewerApplication.cs" />
     <Compile Include="Previewers\AbstractPreviewer.cs" />

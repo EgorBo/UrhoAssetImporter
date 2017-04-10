@@ -6,8 +6,11 @@ namespace UrhoSharp.Viewer.Core.Previewers
 	public abstract class AbstractPreviewer
 	{
 		protected UrhoScene App { get; }
-
 		protected ResourceCache ResourceCache => App.ResourceCache;
+		protected Node Node { get; private set; }
+		protected Scene Scene => Node?.Scene;
+		protected Asset Asset { get; private set; }
+		protected IEditor Editor { get; private set; }
 
 		protected AbstractPreviewer(UrhoScene urhoApp)
 		{
@@ -20,8 +23,11 @@ namespace UrhoSharp.Viewer.Core.Previewers
 
 		public virtual bool RotateRootNode => true;
 
-		public void Show(Node node, Asset asset)
+		public void Show(Node node, Asset asset, IEditor editor)
 		{
+			Node = node;
+			Asset = asset;
+			Editor = editor;
 			OnShow(node, asset);
 			App.Update += OnUpdate;
 		}
@@ -32,7 +38,6 @@ namespace UrhoSharp.Viewer.Core.Previewers
 			OnStop();
 		}
 
-		// TODO: will be replaced with Material.FromColor with the next UrhoSharp nuget
 		protected Material CreateDefaultMaterial()
 		{
 			var material = ResourceCache.GetMaterial("Materials/DefaulPreviewerMaterial.xml").Clone(string.Empty);

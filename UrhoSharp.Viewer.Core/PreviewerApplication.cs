@@ -15,6 +15,7 @@ namespace UrhoSharp.Viewer.Core
 	{
 		UrhoScene urhoScene;
 		Asset currentAsset;
+		IEditor editor;
 		readonly AssetsResolver assetsResolver;
 		static string lastLoadedFile;
 		static CancellationTokenSource cancellationSource = new CancellationTokenSource();
@@ -33,10 +34,11 @@ namespace UrhoSharp.Viewer.Core
 				};
 		}
 
-		public async Task<UrhoScene> Show(string file, int initialWidth = 1000, int initialHeight = 1000)
+		public async Task<UrhoScene> Show(string file, IEditor editor, int initialWidth = 1000, int initialHeight = 1000)
 		{
 			try
 			{
+				this.editor = editor;
 				lastLoadedFile = file;
 				cancellationSource.Cancel();
 				cancellationSource = new CancellationTokenSource();
@@ -81,7 +83,7 @@ namespace UrhoSharp.Viewer.Core
 				token.ThrowIfCancellationRequested();
 
 				currentAsset = asset;
-				urhoScene.ShowAsset(asset);
+				urhoScene.ShowAsset(asset, editor);
 				RunFrames();
 				return urhoScene;
 			}
@@ -133,7 +135,7 @@ namespace UrhoSharp.Viewer.Core
 				FpsLimit = ActiveTabFpsLimit;
 				try
 				{
-					await Show(currentAsset.OriginalFile);
+					await Show(currentAsset.OriginalFile, editor);
 				}
 				catch(Exception exc) { Debug.WriteLine(exc); }
 			}

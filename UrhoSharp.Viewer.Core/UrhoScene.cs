@@ -34,6 +34,7 @@ namespace UrhoSharp.Viewer.Core
 		public bool DrawDebugFrame { get; set; }
 		public bool HandMode { get; set; }
 		public Asset CurrentAsset => currentAsset;
+		public AbstractPreviewer CurrentPreviewer => currentPreviewer;
 
 		public UrhoScene(ApplicationOptions opts) : base (opts)
 		{
@@ -134,7 +135,7 @@ namespace UrhoSharp.Viewer.Core
 			Input.MouseMoved += OnMouseMoved;
 			Engine.PostRenderUpdate += args => { if (DrawDebugFrame) Renderer.DrawDebugGeometry(false); };
 		}
-
+		
 		public void ResetClearColor() => Viewport.SetClearColor(Color.White);
 
 		void OnKeyDown(KeyDownEventArgs e)
@@ -194,7 +195,7 @@ namespace UrhoSharp.Viewer.Core
 			}
 			else
 			{
-				RotateRootNode(true);
+				//RotateRootNode(true);
 			}
 		}
 
@@ -228,7 +229,7 @@ namespace UrhoSharp.Viewer.Core
 				CameraNode.Translate(-Vector3.UnitZ*scrollSpeed*args.Wheel*-1);
 		}
 
-		public void ShowAsset(Asset asset)
+		public void ShowAsset(Asset asset, IEditor editor)
 		{
 			if (currentAsset != null && currentAsset.RootDirectory != asset.RootDirectory)
 				throw new InvalidOperationException("UrhoApplication must be restarted");
@@ -256,7 +257,7 @@ namespace UrhoSharp.Viewer.Core
 			try
 			{
 				Log.Write(LogLevel.Debug, $"Show previewer: {previewer.GetType().Name}");
-				previewer.Show(modelNode, asset);
+				previewer.Show(modelNode, asset, editor);
 				RotateRootNode(true);
 			}
 			catch (Exception exc)
