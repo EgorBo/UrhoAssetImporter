@@ -68,13 +68,14 @@ namespace UrhoSharp.Viewer.Core
 					{
 						ExternalWindow = surfacePtr,
 						ResourcePaths = new[] { asset.RootDirectory, "ViewerAssets" },
+
 						Width = initialWidth, 
 						Height = initialHeight,
 						AutoloadCoreData = false,
 						LimitFps = false,
 						ResizableWindow = true,
-						//Multisampling = 8, -- Urho3D bug on resize
-						ResourcePrefixPaths = new[] {Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location)},
+						//Multisampling = 8, //-- Urho3D bug on resize
+						ResourcePrefixPaths = new[] { Environment.CurrentDirectory },
 						DelayedStart = true,
 					});
 

@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrhoSharp.Viewer.Core", "Ur
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrhoSharp.Viewer.Wpf", "UrhoSharp.Viewer.Wpf\UrhoSharp.Viewer.Wpf.csproj", "{14EEA251-E8A8-4EAA-AD78-1CDC87B75C43}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UrhoSharp.Viewer.Cocoa", "UrhoSharp.Viewer.Cocoa\UrhoSharp.Viewer.Cocoa.csproj", "{A28AF950-0D4C-4895-AA1E-AD33B253F9BF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{14EEA251-E8A8-4EAA-AD78-1CDC87B75C43}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14EEA251-E8A8-4EAA-AD78-1CDC87B75C43}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14EEA251-E8A8-4EAA-AD78-1CDC87B75C43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A28AF950-0D4C-4895-AA1E-AD33B253F9BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A28AF950-0D4C-4895-AA1E-AD33B253F9BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A28AF950-0D4C-4895-AA1E-AD33B253F9BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A28AF950-0D4C-4895-AA1E-AD33B253F9BF}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
