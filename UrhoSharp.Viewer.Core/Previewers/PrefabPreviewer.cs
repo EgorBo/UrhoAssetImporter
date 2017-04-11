@@ -58,6 +58,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 			var cursorPos = App.UI.CursorPosition;
 			var cameraRay = App.Camera.GetScreenRay((float)cursorPos.X / App.Graphics.Width, (float)cursorPos.Y / App.Graphics.Height);
 			var result = Scene.GetComponent<Octree>().RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry);
+			bool handled = false;
 			if (result != null)
 			{
 				var geometry = result.Value.Drawable as StaticModel;
@@ -68,6 +69,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 						selectedModel?.SetMaterial(0, selectedMaterial);
 						selectedMaterial.ReleaseRef();
 					}
+					handled = true;
 					selectedMaterial = geometry.GetMaterial(0);
 					selectedMaterial.AddRef();
 					selectedModel = geometry;
@@ -87,6 +89,11 @@ namespace UrhoSharp.Viewer.Core.Previewers
 
 					Editor?.HighlightXmlForNode(result.Value.Node);
 				}
+			}
+
+			if (!handled)
+			{
+				selectedModel?.SetMaterial(0, selectedMaterial);
 			}
 		}
 

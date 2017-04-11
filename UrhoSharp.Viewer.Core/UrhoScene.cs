@@ -84,12 +84,12 @@ namespace UrhoSharp.Viewer.Core
 			light = lightNode.CreateComponent<Light>();
 			light.LightType = LightType.Directional;
 			light.CastShadows = true;
-			light.Brightness = 0.7f;
+			light.Brightness = 0.5f;
 
 			var zoneNode = Scene.CreateChild("Zone");
 			var zone = zoneNode.GetComponent<Zone>() ?? zoneNode.CreateComponent<Zone>();
 			zone.SetBoundingBox(new BoundingBox(-10000.0f, 10000.0f));
-			zone.AmbientColor = new Color(0.4f, 0.4f, 0.4f);
+			zone.AmbientColor = new Color(0.6f, 0.6f, 0.6f);
 
 			// GUI
 			errorText = new Text();

@@ -92,13 +92,12 @@ namespace UrhoSharp.Viewer.Wpf
 							RawEditor.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 							RawEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
 							RawEditor.Text = raw;
-							RawEditorColumn.Width = new GridLength(4, GridUnitType.Star);
-							RawEditorColumn.MinWidth = 100;
+							RawEditor.IsReadOnly = false;
 						}
 						else
 						{
-							RawEditorColumn.Width = new GridLength(0);
-							RawEditorColumn.MinWidth = 0;
+							RawEditor.IsReadOnly = true;
+							RawEditor.Text = "";
 						}
 						WorkingDirectory = currentAsset.RootDirectory;
 					}
