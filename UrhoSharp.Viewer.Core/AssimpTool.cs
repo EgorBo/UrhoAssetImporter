@@ -50,6 +50,7 @@ namespace UrhoSharp.Viewer.Core
 				Directory.CreateDirectory(directory);
 			assimpExecPath = Path.Combine(directory, assimpExeName);
 			GetType().Assembly.CopyEmbeddedResourceTo(assimpExeName, assimpExecPath, true);
+			System.Diagnostics.Process.Start("chmod", $"777 \"{assimpExecPath}\"");
 			installed = true;
 		}
 	}

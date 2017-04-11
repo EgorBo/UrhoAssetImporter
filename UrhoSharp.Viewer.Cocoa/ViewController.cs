@@ -9,7 +9,7 @@ using CoreGraphics;
 
 namespace UrhoSharp.Viewer.Cocoa
 {
-	public partial class ViewController : NSViewController
+	public partial class ViewController : NSViewController, IEditor
 	{
 		PreviewerApplication previewer;
 		UrhoSurface urhoSurface;
@@ -27,6 +27,7 @@ namespace UrhoSharp.Viewer.Cocoa
 			urhoSurface.AutoresizingMask = NSViewResizingMask.WidthSizable | NSViewResizingMask.HeightSizable;
 			UrhoSurfacePlaceholder.AddSubview(urhoSurface);
 
+
 			previewer = new PreviewerApplication(new AssetsResolver { AssetsImporterFormats = true, AssetsImporterRareFormats = true, Images = true });
 			previewer.SurfaceRecreationRequested += OnSurfaceRequested;
 		}
@@ -41,14 +42,14 @@ namespace UrhoSharp.Viewer.Cocoa
 
 			if (dlg.RunModal() == 1)
 			{
+				PathLabel.StringValue = dlg.Filename;
 				Run(dlg.Filename);
 			}
 		}
 
-		async void Run(string file)
+		void Run(string file)
 		{
-			await Task.Delay(1000);
-			previewer.Show(file);
+			previewer.Show(file, this, (int)UrhoSurfacePlaceholder.Frame.Width, (int)UrhoSurfacePlaceholder.Frame.Height);
 		}
 
 		IntPtr OnSurfaceRequested()
@@ -67,6 +68,10 @@ namespace UrhoSharp.Viewer.Cocoa
 				base.RepresentedObject = value;
 				// Update the view, if already loaded.
 			}
+		}
+
+		public void HighlightXmlForNode(Node node)
+		{
 		}
 	}
 

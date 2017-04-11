@@ -13,6 +13,9 @@ namespace UrhoSharp.Viewer.Cocoa
 	partial class ViewController
 	{
 		[Outlet]
+		AppKit.NSTextField PathLabel { get; set; }
+
+		[Outlet]
 		AppKit.NSView UrhoSurfacePlaceholder { get; set; }
 
 		[Action ("OpenFileButton:")]
@@ -20,6 +23,11 @@ namespace UrhoSharp.Viewer.Cocoa
 		
 		void ReleaseDesignerOutlets ()
 		{
+			if (PathLabel != null) {
+				PathLabel.Dispose ();
+				PathLabel = null;
+			}
+
 			if (UrhoSurfacePlaceholder != null) {
 				UrhoSurfacePlaceholder.Dispose ();
 				UrhoSurfacePlaceholder = null;

@@ -689,9 +689,22 @@
                                 <rect key="frame" x="0.0" y="0.0" width="480" height="244"/>
                                 <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             </customView>
+                            <textField horizontalHuggingPriority="251" verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ou1-hS-Frp">
+                                <rect key="frame" x="90" y="248" width="390" height="17"/>
+                                <autoresizingMask key="autoresizingMask" widthSizable="YES" flexibleMinY="YES"/>
+                                <textFieldCell key="cell" scrollable="YES" lineBreakMode="clipping" sendsActionOnEndEditing="YES" id="3gz-c3-ere">
+                                    <font key="font" metaFont="system"/>
+                                    <color key="textColor" name="labelColor" catalog="System" colorSpace="catalog"/>
+                                    <color key="backgroundColor" name="controlColor" catalog="System" colorSpace="catalog"/>
+                                </textFieldCell>
+                                <connections>
+                                    <action selector="PathLabel:" target="XfG-lQ-9wD" id="2sJ-rI-rpk"/>
+                                </connections>
+                            </textField>
                         </subviews>
                     </view>
                     <connections>
+                        <outlet property="PathLabel" destination="Ou1-hS-Frp" id="4KG-Ha-yh0"/>
                         <outlet property="UrhoSurfacePlaceholder" destination="YG5-46-YZI" id="D1q-18-b4X"/>
                     </connections>
                 </viewController>
