@@ -88,8 +88,8 @@ namespace UrhoSharp.Viewer.Wpf
 						if (xmlBasedAssets.Contains(currentAsset.Type))
 						{
 							var raw = File.ReadAllText(currentAsset.FullPathToAsset);
-							RawEditor.HorizontalScrollBarVisibility = ScrollBarVisibility.Hidden;
-							RawEditor.VerticalScrollBarVisibility = ScrollBarVisibility.Hidden;
+							RawEditor.HorizontalScrollBarVisibility = ScrollBarVisibility.Auto;
+							RawEditor.VerticalScrollBarVisibility = ScrollBarVisibility.Auto;
 							RawEditor.SyntaxHighlighting = HighlightingManager.Instance.GetDefinition("XML");
 							RawEditor.Text = raw;
 							RawEditorColumn.Width = new GridLength(4, GridUnitType.Star);

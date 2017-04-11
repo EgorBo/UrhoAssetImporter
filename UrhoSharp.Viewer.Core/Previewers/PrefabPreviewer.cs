@@ -20,13 +20,36 @@ namespace UrhoSharp.Viewer.Core.Previewers
 		protected override void OnShow(Node node, Asset asset)
 		{
 			App.Input.MouseButtonUp += Input_MouseButtonUp;
+			App.Input.KeyUp += Input_KeyUp;
 			node.CreateComponent<WirePlane>();
 			Refresh();
+		}
+
+		void Input_KeyUp(KeyUpEventArgs e)
+		{
+			switch (e.Key)
+			{
+				case Key.X:
+					RotateAxis(e.Qualifiers > 0 ? -90 : 90, 0, 0);
+					break;
+				case Key.Y:
+					RotateAxis(0, e.Qualifiers > 0 ? -90 : 90, 0);
+					break;
+				case Key.Z:
+					RotateAxis(0, 0, e.Qualifiers > 0 ? -90 : 90);
+					break;
+			}
+		}
+
+		void RotateAxis(float x, float y, float z)
+		{
+			prefabNode.Rotate(new Quaternion(x, y, z), TransformSpace.Local);
 		}
 
 		protected override void OnStop()
 		{
 			App.Input.MouseButtonUp -= Input_MouseButtonUp;
+			App.Input.KeyUp -= Input_KeyUp;
 			base.OnStop();
 		}
 
