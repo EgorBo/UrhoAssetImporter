@@ -62,7 +62,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 					specColorAnimation.SetKeyFrame(1.0f, fade);
 					mat.SetShaderParameterAnimation("MatDiffColor", specColorAnimation, WrapMode.Loop, 1.0f);
 
-					Editor.HighlightXmlForNode(result.Value.Node);
+					Editor?.HighlightXmlForNode(result.Value.Node);
 				}
 			}
 		}

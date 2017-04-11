@@ -74,7 +74,7 @@ namespace UrhoSharp.Viewer.Core
 						AutoloadCoreData = false,
 						LimitFps = false,
 						ResizableWindow = true,
-						//Multisampling = 8, //-- Urho3D bug on resize
+						Multisampling = Environment.OSVersion.Platform == PlatformID.Win32NT ? 0 : 8,
 						ResourcePrefixPaths = new[] { Environment.CurrentDirectory },
 						DelayedStart = true,
 					});

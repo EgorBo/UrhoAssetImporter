@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using UrhoSharp.Viewer.Core.Utils;
@@ -41,25 +42,14 @@ namespace UrhoSharp.Viewer.Core
 		{
 			if (installed)
 				return;
-
-			string assimpExeName = "AssetImporter_Win64.exe"; //Windows
+			
 			bool isWin = Environment.OSVersion.Platform == PlatformID.Win32NT;
-			if (!isWin)
-			{
-				assimpExeName = "AssetImporter_macOS"; //macOS
-				directory = "UrhoSharpAssimpTemp";
-				if (!Directory.Exists(directory))
-					Directory.CreateDirectory(directory);
-				assimpExecPath = assimpExeName;
-			}
-			else
-			{
-				directory = Path.Combine(Path.GetTempPath(), "UrhoSharpAssimpTemp");
-				if (!Directory.Exists(directory))
-					Directory.CreateDirectory(directory);
-				assimpExecPath = Path.Combine(directory, assimpExeName);
-				GetType().Assembly.CopyEmbeddedResourceTo(assimpExeName, assimpExecPath, true);
-			}
+			string assimpExeName = isWin ? "AssetImporter_Win64.exe" : "AssetImporter_macOS";
+			directory = Path.Combine(Path.GetTempPath(), "UrhoSharpAssimpTemp");
+			if (!Directory.Exists(directory))
+				Directory.CreateDirectory(directory);
+			assimpExecPath = Path.Combine(directory, assimpExeName);
+			GetType().Assembly.CopyEmbeddedResourceTo(assimpExeName, assimpExecPath, true);
 			installed = true;
 		}
 	}
