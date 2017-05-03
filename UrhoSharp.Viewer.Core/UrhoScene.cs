@@ -6,6 +6,7 @@ using Urho.Actions;
 using Urho.Gui;
 using Urho.IO;
 using Urho.Physics;
+using Urho.Shapes;
 using UrhoSharp.Viewer.Core.Previewers;
 using UrhoSharp.Viewer.Core.Utils;
 
@@ -78,18 +79,10 @@ namespace UrhoSharp.Viewer.Core
 			rootNode = Scene.CreateChild("RootNode");
 			rootNode.Position = new Vector3(x: 0, y: 0, z: 0);
 
-			// Light
-			lightNode = Scene.CreateChild("DirectionalLight");
-			lightNode.SetDirection(new Vector3(0.2f, 0.0f, 1f));
-			light = lightNode.CreateComponent<Light>();
-			light.LightType = LightType.Directional;
-			light.CastShadows = true;
-			light.Brightness = 0.5f;
-
 			var zoneNode = Scene.CreateChild("Zone");
 			var zone = zoneNode.GetComponent<Zone>() ?? zoneNode.CreateComponent<Zone>();
 			zone.SetBoundingBox(new BoundingBox(-10000.0f, 10000.0f));
-			zone.AmbientColor = new Color(0.6f, 0.6f, 0.6f);
+			zone.AmbientColor = new Color(0.8f, 0.8f, 0.8f);
 
 			// GUI
 			errorText = new Text();
@@ -106,6 +99,19 @@ namespace UrhoSharp.Viewer.Core
 			Pitch = 8;
 			Camera = CameraNode.CreateComponent<Camera>();
 			Input.SetMouseVisible(true, false);
+
+
+			// Light
+			lightNode = CameraNode.CreateChild("DirectionalLight");
+			lightNode.Position = new Vector3(0, 20, -5);
+			//lightNode.SetDirection(new Vector3(0.2f, 0.0f, 1f));
+			lightNode.CreateComponent<Box>();
+			light = lightNode.CreateComponent<Light>();
+			light.LightType = LightType.Point;
+			light.CastShadows = true;
+			light.Brightness = 1.0f;
+			light.Range = 50;
+
 
 			// Viewport
 			Viewport = new Viewport(Context, Scene, Camera, null);

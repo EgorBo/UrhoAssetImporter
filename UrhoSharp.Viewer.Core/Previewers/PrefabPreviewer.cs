@@ -1,6 +1,7 @@
 ﻿using System;
 using Urho;
 using Urho.Gui;
+using Urho.Shapes;
 using UrhoSharp.Viewer.Core.Components;
 using UrhoSharp.Viewer.Core.Utils;
 
@@ -49,51 +50,73 @@ namespace UrhoSharp.Viewer.Core.Previewers
 		protected override void OnStop()
 		{
 			App.Input.MouseButtonUp -= Input_MouseButtonUp;
+App.Input.MouseButtonUp += e =>
+{
+	var cursorPos = App.UI.CursorPosition;
+	var cameraRay = App.Camera.GetScreenRay((float)cursorPos.X / App.Graphics.Width, (float)cursorPos.Y / App.Graphics.Height);
+	var result = Scene.GetComponent<Octree>().RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry);
+	if (result != null)
+	{
+		var model = (StaticModel)result.Value.Drawable;
+		if (model != null)
+		{
+			var material = model.GetMaterial(0);
+			if (material != null)
+				material.FillMode = material.FillMode == FillMode.Wireframe ? FillMode.Solid : FillMode.Wireframe;
+		}
+		model.SetMaterial(Material.FromColor(Color.Red));
+	}
+};
+
 			App.Input.KeyUp -= Input_KeyUp;
 			base.OnStop();
 		}
+		
+		Material CreateSelectionMaterial()
+		{
+			var mat = Material.FromColor(Color.Blue);
+			mat.FillMode = FillMode.Wireframe;
+			var specColorAnimation = new ValueAnimation();
+
+			Color color = new Color(0.8f, 0.8f, 0.1f);
+			Color fade = new Color(0.5f, 0.5f, 0.5f);
+
+			specColorAnimation.SetKeyFrame(0.0f, fade);
+			specColorAnimation.SetKeyFrame(0.5f, color);
+			specColorAnimation.SetKeyFrame(1.0f, fade);
+			mat.SetShaderParameterAnimation("MatDiffColor", specColorAnimation, WrapMode.Loop, 1.0f);
+			//mat.AddRef();
+			return mat;
+		}
+
+		private StaticModel prevSourceStaticModel;
+		private StaticModel selectedStaticModel;
 
 		void Input_MouseButtonUp(MouseButtonUpEventArgs e)
 		{
+			if (prevSourceStaticModel != null && !prevSourceStaticModel.IsDeleted)
+			{
+				prevSourceStaticModel.Enabled = true;
+				if (selectedStaticModel != null && !selectedStaticModel.IsDeleted)
+					selectedStaticModel.Remove();
+			}
+
 			var cursorPos = App.UI.CursorPosition;
 			var cameraRay = App.Camera.GetScreenRay((float)cursorPos.X / App.Graphics.Width, (float)cursorPos.Y / App.Graphics.Height);
 			var result = Scene.GetComponent<Octree>().RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry);
-			bool handled = false;
+
 			if (result != null)
 			{
 				var geometry = result.Value.Drawable as StaticModel;
 				if (geometry != null)
 				{
-					if (selectedModel != null && !selectedModel.IsDeleted)
-					{
-						selectedModel?.SetMaterial(0, selectedMaterial);
-						selectedMaterial.ReleaseRef();
-					}
-					handled = true;
-					selectedMaterial = geometry.GetMaterial(0);
-					selectedMaterial.AddRef();
-					selectedModel = geometry;
-
-					var mat = Material.FromColor(Color.Blue);
-					mat.FillMode = FillMode.Wireframe;
-					geometry.SetMaterial(mat);
-					var specColorAnimation = new ValueAnimation();
-
-					Color color = new Color(0.8f, 0.8f, 0.1f);
-					Color fade = new Color(0.5f, 0.5f, 0.5f);
-
-					specColorAnimation.SetKeyFrame(0.0f, fade);
-					specColorAnimation.SetKeyFrame(0.5f, color);
-					specColorAnimation.SetKeyFrame(1.0f, fade);
-					mat.SetShaderParameterAnimation("MatDiffColor", specColorAnimation, WrapMode.Loop, 1.0f);
-
+					prevSourceStaticModel = geometry;
+					geometry.Enabled = false;
+					selectedStaticModel = geometry.Node.CreateComponent<StaticModel>();
+					selectedStaticModel.Model = geometry.Model;
+					selectedStaticModel.SetMaterial(CreateSelectionMaterial());
 					Editor?.HighlightXmlForNode(result.Value.Node);
 				}
-			}
-
-			if (!handled)
-			{
-				selectedModel?.SetMaterial(0, selectedMaterial);
 			}
 		}
 
@@ -105,7 +128,11 @@ namespace UrhoSharp.Viewer.Core.Previewers
 
 			prefabNode?.Remove();
 			prefabNode = Scene.InstantiateXml(file, Vector3.Zero, Quaternion.Identity, CreateMode.Replicated);
-			prefabNode?.ChangeParent(Node);
+			if (prefabNode != null)
+			{
+				prefabNode.ChangeParent(Node);
+				//prefabNode.Translate(Vector3.Up * 0.75f);
+			}
 
 			if (scale == 0 && prefabNode != null)
 			{
