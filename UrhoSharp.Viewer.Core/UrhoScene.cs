@@ -262,7 +262,7 @@ namespace UrhoSharp.Viewer.Core
 
 			try
 			{
-				Log.Write(LogLevel.Debug, $"Show previewer: {previewer.GetType().Name}");
+				Debug.WriteLine($"Show previewer: {previewer.GetType().Name}");
 				previewer.Show(modelNode, asset, editor);
 				RotateRootNode(true);
 			}
@@ -274,7 +274,7 @@ namespace UrhoSharp.Viewer.Core
 
 		void ShowError(string error)
 		{
-			Log.Write(LogLevel.Warning, error);
+			Debug.WriteLine(LogLevel.Warning, error);
 			var errorLines = error.WordWrap(Graphics.Width / 15); //TODO: MeasureString
 			errorText.Value = string.Join("\n", errorLines);
 		}

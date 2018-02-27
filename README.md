@@ -8,4 +8,6 @@ Supported platforms:
 - Windows (WPF)
 - macOS (Cocoa)
 
+![Screenshot](Screenshots/Screenshot2.png)
+  
 ![Screenshot](Screenshots/wpf.gif)

@@ -51,8 +51,7 @@ namespace UrhoSharp.Viewer.Core
 				token.ThrowIfCancellationRequested();
 
 				token.ThrowIfCancellationRequested();
-				Log.Write(LogLevel.Debug,
-					$"PreviewerApplication.Show for: {file}, resolved asset={asset}, asm.location={Assembly.GetExecutingAssembly().Location}");
+				Debug.WriteLine($"PreviewerApplication.Show for: {file}, resolved asset={asset}, asm.location={Assembly.GetExecutingAssembly().Location}");
 
 				if (Application.HasCurrent)
 					await Application.Current.Exit();
@@ -119,7 +118,7 @@ namespace UrhoSharp.Viewer.Core
 
 		public void Close()
 		{
-			Log.Write(LogLevel.Debug, $"PreviewerApplication.Close for asset={currentAsset}");
+			Debug.WriteLine($"PreviewerApplication.Close for asset={currentAsset}");
 			urhoScene?.Exit();
 			urhoScene = null;
 		}

@@ -6,7 +6,7 @@
 		xmlns:wpf="clr-namespace:UrhoSharp.Viewer.Wpf" 
 		xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
 		mc:Ignorable="d" Background="#EEF5FD"
-		Title="UrhoSharp viewer" Height="800" Width="1300">
+		Title="UrhoSharp viewer" Height="720" Width="1170">
 	<Window.Resources>
 		<wpf:ItemIconConverter x:Key="ItemIconConverter"/>
 	</Window.Resources>

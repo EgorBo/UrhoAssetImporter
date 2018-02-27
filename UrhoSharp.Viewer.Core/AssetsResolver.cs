@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
@@ -68,7 +69,7 @@ namespace UrhoSharp.Viewer.Core
 		public async Task<Asset> ResolveAsset(string file, CancellationToken token)
 		{
 			var assetType = ResolveAssetType(file);
-			Log.Write(LogLevel.Debug, $"AssetType for '{file}' is {assetType}");
+			Debug.WriteLine($"AssetType for '{file}' is {assetType}");
 
 			if (assetType == AssetsType.Unknown)
 				return null;
@@ -82,7 +83,7 @@ namespace UrhoSharp.Viewer.Core
 			if (string.IsNullOrEmpty(rootDir) || string.IsNullOrEmpty(relativePathToAsset))
 				return null;
 
-			Log.Write(LogLevel.Debug, $"'{rootDir}' is recognized as Assets Root Directory");
+			Debug.WriteLine($"'{rootDir}' is recognized as Assets Root Directory");
 
 			return new Asset(assetType, rootDir, relativePathToAsset);
 		}
