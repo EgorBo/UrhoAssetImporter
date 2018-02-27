@@ -47,6 +47,7 @@ namespace UrhoSharp.Viewer.Wpf
 			InitializeComponent();
 			previewer = new PreviewerApplication(new AssetsResolver { AssetsImporterFormats = true, AssetsImporterRareFormats = true, Images = true });
 			previewer.SurfaceRecreationRequested += RecreateSurface;
+			RootFolderPath.Text = Config.LastUsedPath;
 		}
 
 		void BuildTree(string folder)
@@ -131,8 +132,7 @@ namespace UrhoSharp.Viewer.Wpf
 			else
 			{
 				BuildTree(RootFolderPath.Text);
-				Settings.Default.RootDir = RootFolderPath.Text;
-				Settings.Default.Save();
+				Config.LastUsedPath = RootFolderPath.Text;
 			}
 		}
 
@@ -174,11 +174,11 @@ namespace UrhoSharp.Viewer.Wpf
 			previewer?.Refresh();
 		}
 
-		public void HighlightXmlForNode(Node node)
+		public void HighlightXmlForNode(string name)
 		{
 			try
 			{
-				var text = $"name=\"Name\" value=\"{node.Name}\"";
+				var text = $"name=\"Name\" value=\"{name}\"";
 				var index = RawEditor.Text.IndexOf(text);
 				RawEditor.Select(index - 11, text.Length + 14);
 
@@ -193,6 +193,35 @@ namespace UrhoSharp.Viewer.Wpf
 				}
 			}
 			catch { }
+		}
+
+		public void DisplayModelScale(float scale)
+		{
+			if (scale == 0 || scale == 1)
+				ScaleLabel.Text = "";
+			else if (scale < 1)
+				ScaleLabel.Text = "Scaled to " + Math.Round((double)scale, 6).ToString();
+			else
+				ScaleLabel.Text = "Scaled to " + scale.ToString("0.00");
+		}
+
+		public void DispatchToUI(Action action)
+		{
+			Dispatcher.BeginInvoke(action);
+		}
+
+		public IConfig Config { get; } = new ConfigImpl();
+	}
+
+	public class ConfigImpl : IConfig
+	{
+		public string LastUsedPath
+		{
+			get => Settings.Default.RootDir;
+			set {
+				Settings.Default.RootDir = value;
+				Settings.Default.Save();
+			}
 		}
 	}
 }

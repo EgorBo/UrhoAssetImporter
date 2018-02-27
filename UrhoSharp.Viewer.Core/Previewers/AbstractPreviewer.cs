@@ -28,6 +28,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 			Node = node;
 			Asset = asset;
 			Editor = editor;
+			Editor?.DispatchToUI(() => Editor.DisplayModelScale(0f));
 			OnShow(node, asset);
 			App.Update += OnUpdate;
 		}

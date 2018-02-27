@@ -9,6 +9,12 @@ namespace UrhoSharp.Viewer.Core
 {
 	public interface IEditor
 	{
-		void HighlightXmlForNode(Node node);
+		void HighlightXmlForNode(string node);
+
+		void DisplayModelScale(float scale);
+
+		void DispatchToUI(Action action);
+
+		IConfig Config { get; }
 	}
 }

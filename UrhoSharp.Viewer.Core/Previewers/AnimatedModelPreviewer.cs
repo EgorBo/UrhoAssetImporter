@@ -15,7 +15,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 
 		protected override void OnShow(Node node, Asset asset)
 		{
-			node.CreateComponent<WirePlane>();
+			node.CreateComponent<Components.WirePlane>();
 			//Here we should find a model to apply ANI
 			//TODO: ask user if not sure
 			var modelName = Directory.GetFiles(Path.GetDirectoryName(asset.FullPathToAsset), "*.mdl")
@@ -37,6 +37,8 @@ namespace UrhoSharp.Viewer.Core.Previewers
 				state.Looped = true;
 			}
 			node.SetScaleBasedOnBoundingBox(60);
+			var scaledTo = node.Scale.X;
+			Editor?.DispatchToUI(() => Editor.DisplayModelScale(scaledTo));
 		}
 
 		protected override void OnUpdate(UpdateEventArgs e)

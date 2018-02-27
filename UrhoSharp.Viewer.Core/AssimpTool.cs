@@ -25,7 +25,7 @@ namespace UrhoSharp.Viewer.Core
 		public async Task<Asset> ConvertToPrefab(string file, CancellationToken token, bool asPrefab = true)
 		{
 			InstallIfNeeded();
-			string outputDir = Path.Combine(directory, Guid.NewGuid().ToString("N"));
+			string outputDir = Path.Combine(directory, Guid.NewGuid().ToString("N").Substring(0, 7) + "_UrhoData");
 			string prefabFileName = "Prefab.xml";
 			string assimpArgs = $"{(asPrefab ? "node" : "scene")} \"{file}\" \"{Path.Combine(outputDir, prefabFileName)}\"";
 

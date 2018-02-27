@@ -13,6 +13,8 @@ namespace UrhoSharp.Viewer.Core.Previewers
 		float scale;
 		Material selectedMaterial;
 		StaticModel selectedModel;
+		StaticModel prevSourceStaticModel;
+		StaticModel selectedStaticModel;
 
 		public PrefabPreviewer(UrhoScene urhoApp) : base(urhoApp)
 		{
@@ -22,7 +24,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 		{
 			App.Input.MouseButtonUp += Input_MouseButtonUp;
 			App.Input.KeyUp += Input_KeyUp;
-			node.CreateComponent<WirePlane>();
+			node.CreateComponent<Components.WirePlane>();
 			Refresh();
 		}
 
@@ -50,23 +52,23 @@ namespace UrhoSharp.Viewer.Core.Previewers
 		protected override void OnStop()
 		{
 			App.Input.MouseButtonUp -= Input_MouseButtonUp;
-App.Input.MouseButtonUp += e =>
-{
-	var cursorPos = App.UI.CursorPosition;
-	var cameraRay = App.Camera.GetScreenRay((float)cursorPos.X / App.Graphics.Width, (float)cursorPos.Y / App.Graphics.Height);
-	var result = Scene.GetComponent<Octree>().RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry);
-	if (result != null)
-	{
-		var model = (StaticModel)result.Value.Drawable;
-		if (model != null)
-		{
-			var material = model.GetMaterial(0);
-			if (material != null)
-				material.FillMode = material.FillMode == FillMode.Wireframe ? FillMode.Solid : FillMode.Wireframe;
-		}
-		model.SetMaterial(Material.FromColor(Color.Red));
-	}
-};
+			App.Input.MouseButtonUp += e =>
+			{
+				var cursorPos = App.UI.CursorPosition;
+				var cameraRay = App.Camera.GetScreenRay((float)cursorPos.X / App.Graphics.Width, (float)cursorPos.Y / App.Graphics.Height);
+				var result = Scene.GetComponent<Octree>().RaycastSingle(cameraRay, RayQueryLevel.Triangle, 10000, DrawableFlags.Geometry);
+				if (result != null)
+				{
+					var model = (StaticModel)result.Value.Drawable;
+					if (model != null)
+					{
+						var material = model.GetMaterial(0);
+						if (material != null)
+							material.FillMode = material.FillMode == FillMode.Wireframe ? FillMode.Solid : FillMode.Wireframe;
+					}
+					model.SetMaterial(Material.FromColor(Color.Red));
+				}
+			};
 
 			App.Input.KeyUp -= Input_KeyUp;
 			base.OnStop();
@@ -88,9 +90,6 @@ App.Input.MouseButtonUp += e =>
 			//mat.AddRef();
 			return mat;
 		}
-
-		private StaticModel prevSourceStaticModel;
-		private StaticModel selectedStaticModel;
 
 		void Input_MouseButtonUp(MouseButtonUpEventArgs e)
 		{
@@ -115,7 +114,9 @@ App.Input.MouseButtonUp += e =>
 					selectedStaticModel = geometry.Node.CreateComponent<StaticModel>();
 					selectedStaticModel.Model = geometry.Model;
 					selectedStaticModel.SetMaterial(CreateSelectionMaterial());
-					Editor?.HighlightXmlForNode(result.Value.Node);
+
+					var nodeName = result.Value.Node.Name;
+					Editor?.DispatchToUI(() => Editor.HighlightXmlForNode(nodeName));
 				}
 			}
 		}
@@ -143,6 +144,7 @@ App.Input.MouseButtonUp += e =>
 			{
 				prefabNode?.SetScale(scale);
 			}
+			Editor?.DispatchToUI(() => Editor.DisplayModelScale(scale));
 		}
 
 	}

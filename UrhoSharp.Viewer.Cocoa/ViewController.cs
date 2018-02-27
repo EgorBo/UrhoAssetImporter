@@ -70,9 +70,15 @@ namespace UrhoSharp.Viewer.Cocoa
 			}
 		}
 
-		public void HighlightXmlForNode(Node node)
+		public void HighlightXmlForNode(string node)
 		{
 		}
+
+		public void DispatchToUI(Action action)
+		{
+		}
+
+		IConfig Config { get; }
 	}
 
 

@@ -12,7 +12,7 @@ namespace UrhoSharp.Viewer.Core.Previewers
 
 		protected override void OnShow(Node node, Asset asset)
 		{
-			node.CreateComponent<WirePlane>();
+			node.CreateComponent<Components.WirePlane>();
 			StaticModel model = node.CreateComponent<StaticModel>();
 			model.Model = ResourceCache.GetModel(asset.RelativePathToAsset);
 
@@ -31,6 +31,8 @@ namespace UrhoSharp.Viewer.Core.Previewers
 
 			model.SetMaterial(materials.Any() ? ResourceCache.GetMaterial(materials.First()) : CreateDefaultMaterial());
 			node.SetScaleBasedOnBoundingBox(60);
+			var scaledTo = node.Scale.X;
+			Editor?.DispatchToUI(() => Editor.DisplayModelScale(scaledTo));
 		}
 	}
 }
